@@ -38,27 +38,29 @@ class MainActivity : AppCompatActivity() {
             null
         }
 
-// Set the input filter on the EditText
         binding.editTextListA.filters = arrayOf(filter)
         binding.editTextListB.filters = arrayOf(filter)
         binding.editTextListC.filters = arrayOf(filter)
 
         binding.buttonCalculate.setOnClickListener {
-
-            listA = extractElements(binding.editTextListA.text.toString())
-            listB = extractElements(binding.editTextListA.text.toString())
-            listC = extractElements(binding.editTextListA.text.toString())
-
-            listA.union(listB).union(listC).toList().also { unionItems = it }
-            listA.intersect(listB.toSet()).intersect(listC.toSet()).toString()
-                .also { intersectionItems = it }
-            unionItems.maxOrNull().toString().also { maxItem = it }
-
-
-            binding.result1.text = intersectionItems
-            binding.result2.text = unionItems.toString()
-            binding.result3.text = maxItem
+            performAnalytics()
         }
+    }
+
+    private fun performAnalytics() {
+        listA = extractElements(binding.editTextListA.text.toString())
+        listB = extractElements(binding.editTextListB.text.toString())
+        listC = extractElements(binding.editTextListC.text.toString())
+
+        listA.union(listB).union(listC).toList().also { unionItems = it }
+        listA.intersect(listB.toSet()).intersect(listC.toSet()).toString()
+            .also { intersectionItems = it }
+        unionItems.maxOrNull().toString().also { maxItem = it }
+
+
+        binding.result1.text = intersectionItems
+        binding.result2.text = unionItems.toString()
+        binding.result3.text = maxItem
     }
 
     private fun showErrorDialog() {
