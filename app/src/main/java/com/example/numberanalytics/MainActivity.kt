@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             for (i in start until end) {
                 if (!Character.isDigit(source[i]) && source[i] != ',') {
                     showErrorDialog()
-                    return@InputFilter dest.toString()
+                    return@InputFilter ""
                 }
             }
             null
@@ -44,26 +44,30 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonCalculate.setOnClickListener {
 
-            listA = extractElements(binding.editTextListA.text.toString())
-            listB = extractElements(binding.editTextListB.text.toString())
-            listC = extractElements(binding.editTextListC.text.toString())
-
-            val occurrenceMap = HashMap<Int, Int>()
-            val allNumbers = listA + listB + listC
-
-            for (number in allNumbers) {
-                occurrenceMap[number] = occurrenceMap.getOrDefault(number, 0) + 1
-            }
-
-            val sortedMap = occurrenceMap.toList().sortedBy { (key, _) -> key }.toMap()
-            intersectionItems = sortedMap.filter { (_, value) -> value == 3 }.keys.toList().toString()
-            unionItems = sortedMap.keys.toList()
-            maxItem = sortedMap.keys.max().toString()
-
-            binding.result1.text = intersectionItems
-            binding.result2.text = unionItems.toString()
-            binding.result3.text = maxItem
+            performAnalyticsByHashmap()
         }
+    }
+
+    private fun performAnalyticsByHashmap() {
+        listA = extractElements(binding.editTextListA.text.toString())
+        listB = extractElements(binding.editTextListB.text.toString())
+        listC = extractElements(binding.editTextListC.text.toString())
+
+        val occurrenceMap = HashMap<Int, Int>()
+        val allNumbers = listA + listB + listC
+
+        for (number in allNumbers) {
+            occurrenceMap[number] = occurrenceMap.getOrDefault(number, 0) + 1
+        }
+
+        val sortedMap = occurrenceMap.toList().sortedBy { (key, _) -> key }.toMap()
+        intersectionItems = sortedMap.filter { (_, value) -> value == 3 }.keys.toList().toString()
+        unionItems = sortedMap.keys.toList()
+        maxItem = sortedMap.keys.max().toString()
+
+        binding.result1.text = intersectionItems
+        binding.result2.text = unionItems.toString()
+        binding.result3.text = maxItem
     }
 
     private fun showErrorDialog() {
