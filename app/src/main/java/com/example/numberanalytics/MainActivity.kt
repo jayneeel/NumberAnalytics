@@ -1,11 +1,13 @@
 package com.example.numberanalytics
 
 import android.os.Bundle
+import android.text.InputFilter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.numberanalytics.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
@@ -26,16 +28,49 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        val filter = InputFilter { source, start, end, dest, dstart, dend ->
+            for (i in start until end) {
+                if (!Character.isDigit(source[i]) && source[i] != ',') {
+                    showErrorDialog("Only Numbers and , are allowed!")
+                    return@InputFilter dest.toString()
+                }
+            }
+            null
+        }
+
+// Set the input filter on the EditText
+        binding.editTextListA.filters = arrayOf(filter)
+        binding.editTextListB.filters = arrayOf(filter)
+        binding.editTextListC.filters = arrayOf(filter)
+
         binding.buttonCalculate.setOnClickListener {
-            listA = binding.editTextListA.text?.split(",")!!.mapNotNull { it.trim().toIntOrNull() }
-            listB = binding.editTextListB.text?.split(",")!!.mapNotNull { it.trim().toIntOrNull() }
-            listC = binding.editTextListC.text?.split(",")!!.mapNotNull { it.trim().toIntOrNull() }
-            unionItems = listA.union(listB).union(listC).toList()
-            intersectionItems = listA.intersect(listB.toSet()).intersect(listC.toSet()).toString()
-            maxItem = unionItems.maxOrNull().toString()
+
+            listA = extractElements(binding.editTextListA.text.toString())
+            listB = extractElements(binding.editTextListA.text.toString())
+            listC = extractElements(binding.editTextListA.text.toString())
+
+            listA.union(listB).union(listC).toList().also { unionItems = it }
+            listA.intersect(listB.toSet()).intersect(listC.toSet()).toString()
+                .also { intersectionItems = it }
+            unionItems.maxOrNull().toString().also { maxItem = it }
+
+
             binding.result1.text = intersectionItems
             binding.result2.text = unionItems.toString()
             binding.result3.text = maxItem
         }
+    }
+
+    private fun showErrorDialog(errorMessage: String) {
+        val builder = MaterialAlertDialogBuilder(this)
+        builder.setTitle("Invalid Input")
+            .setMessage(errorMessage)
+            .setPositiveButton("OK", null)
+            .show()
+
+    }
+
+    private fun extractElements(str: String): List<Int> {
+        return str.split(",").mapNotNull { it.trim().toIntOrNull() }
     }
 }
