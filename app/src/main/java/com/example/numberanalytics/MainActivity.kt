@@ -28,10 +28,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val filter = InputFilter { source, start, end, dest, dstart, dend ->
+        val filter = InputFilter { source, start, end, dest, _, _ ->
             for (i in start until end) {
                 if (!Character.isDigit(source[i]) && source[i] != ',') {
-                    showErrorDialog("Only Numbers and , are allowed!")
+                    showErrorDialog()
                     return@InputFilter dest.toString()
                 }
             }
@@ -61,10 +61,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showErrorDialog(errorMessage: String) {
+    private fun showErrorDialog() {
         val builder = MaterialAlertDialogBuilder(this)
         builder.setTitle("Invalid Input")
-            .setMessage(errorMessage)
+            .setMessage("Only Numbers and , are allowed!")
             .setPositiveButton("OK", null)
             .show()
 
