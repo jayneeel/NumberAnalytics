@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             null
         }
 
-// Set the input filter on the EditText
         binding.editTextListA.filters = arrayOf(filter)
         binding.editTextListB.filters = arrayOf(filter)
         binding.editTextListC.filters = arrayOf(filter)
@@ -46,14 +45,20 @@ class MainActivity : AppCompatActivity() {
         binding.buttonCalculate.setOnClickListener {
 
             listA = extractElements(binding.editTextListA.text.toString())
-            listB = extractElements(binding.editTextListA.text.toString())
-            listC = extractElements(binding.editTextListA.text.toString())
+            listB = extractElements(binding.editTextListB.text.toString())
+            listC = extractElements(binding.editTextListC.text.toString())
 
-            listA.union(listB).union(listC).toList().also { unionItems = it }
-            listA.intersect(listB.toSet()).intersect(listC.toSet()).toString()
-                .also { intersectionItems = it }
-            unionItems.maxOrNull().toString().also { maxItem = it }
+            val occurrenceMap = HashMap<Int, Int>()
+            val allNumbers = listA + listB + listC
 
+            for (number in allNumbers) {
+                occurrenceMap[number] = occurrenceMap.getOrDefault(number, 0) + 1
+            }
+
+            val sortedMap = occurrenceMap.toList().sortedBy { (key, _) -> key }.toMap()
+            intersectionItems = sortedMap.filter { (_, value) -> value == 3 }.keys.toList().toString()
+            unionItems = sortedMap.keys.toList()
+            maxItem = sortedMap.keys.max().toString()
 
             binding.result1.text = intersectionItems
             binding.result2.text = unionItems.toString()
