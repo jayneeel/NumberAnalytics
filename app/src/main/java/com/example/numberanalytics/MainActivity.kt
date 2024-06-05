@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor = getColor(R.color.primary_accent)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             for (i in start until end) {
                 if (!Character.isDigit(source[i]) && source[i] != ',') {
                     showErrorDialog()
-                    return@InputFilter dest.toString()
+                    return@InputFilter ""
                 }
             }
             null

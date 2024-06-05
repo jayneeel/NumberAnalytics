@@ -2,5 +2,5 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary_accent">#0A0630</color>
+    <color name="primary_accent">#3185fc</color>
 </resources>
